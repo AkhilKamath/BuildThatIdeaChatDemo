@@ -20,11 +20,14 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+# Environment variables
 .env
 .env.*
 !.env.example
-venv/
-.venv/
+/backend/.env
+/backend/.env.*
+!backend/.env.example
 
 # Node/React
 node_modules/
@@ -49,6 +52,7 @@ node_modules/
 *.db
 *.sqlite3
 *.sqlite
+/backend/*.db
 
 # IDE
 .idea/
