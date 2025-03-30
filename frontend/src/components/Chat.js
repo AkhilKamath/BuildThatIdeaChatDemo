@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import { MESSAGE_LIMIT, TIME_FRAME } from '../config';
+import { MESSAGE_LIMIT, TIME_FRAME, API_URL } from '../config';
 import { loadStripe } from '@stripe/stripe-js';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
@@ -421,7 +421,7 @@ function Chat() {
   useEffect(() => {
     const fetchUserStatus = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/user', {
+        const response = await axios.get(`${API_URL}/user`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setIsPremium(response.data.is_premium);
@@ -440,7 +440,7 @@ function Chat() {
       try {
         setIsLoading(true);
         console.log('Fetching chats...');
-        const response = await axios.get('http://localhost:8000/chats', {
+        const response = await axios.get(`${API_URL}/chats`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log('Chats response:', response.data);
@@ -474,7 +474,7 @@ function Chat() {
     try {
       setIsLoading(true);
       console.log('Creating new chat...');
-      const response = await axios.post('http://localhost:8000/chats', 
+      const response = await axios.post(`${API_URL}/chats`, 
         { title: 'New Chat' },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -500,7 +500,7 @@ function Chat() {
   // Fetch message count
   const updateMessageCount = async () => {
     try {
-      const countResponse = await axios.get('http://localhost:8000/message-count', {
+      const countResponse = await axios.get(`${API_URL}/message-count`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const count = countResponse.data.current_count;
@@ -518,7 +518,7 @@ function Chat() {
     const fetchData = async () => {
       try {
         // Fetch message history
-        const messagesResponse = await axios.get('http://localhost:8000/messages', {
+        const messagesResponse = await axios.get(`${API_URL}/messages`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setMessages(messagesResponse.data.map(msg => ({
@@ -538,7 +538,7 @@ function Chat() {
   // Create new chat
   const handleNewChat = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/chats', {}, {
+      const response = await axios.post(`${API_URL}/chats`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setChats(prevChats => [response.data, ...prevChats]);
@@ -553,7 +553,7 @@ function Chat() {
   const handleChatSelect = async (chatId) => {
     setActiveChatId(chatId);
     try {
-      const response = await axios.get(`http://localhost:8000/chats/${chatId}/messages`, {
+      const response = await axios.get(`${API_URL}/chats/${chatId}/messages`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMessages(response.data.map(msg => ({
@@ -580,7 +580,7 @@ function Chat() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/chats/${activeChatId}/messages`,
+        `${API_URL}/chats/${activeChatId}/messages`,
         { content: userMessage },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -604,7 +604,7 @@ function Chat() {
   const handleCheckout = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:8000/create-checkout-session',
+        `${API_URL}/create-checkout-session`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -637,7 +637,7 @@ function Chat() {
 
     try {
       const response = await axios.patch(
-        `http://localhost:8000/chats/${editingChatId}`,
+        `${API_URL}/chats/${editingChatId}`,
         { title: editingTitle.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );

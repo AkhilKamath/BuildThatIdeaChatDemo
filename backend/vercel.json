@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.10",
+        "maxLambdaSize": "15mb"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/favicon.ico",
+      "status": 204
+    },
+    {
+      "src": "/(.*)",
+      "dest": "wsgi.py"
+    }
+  ]
+}

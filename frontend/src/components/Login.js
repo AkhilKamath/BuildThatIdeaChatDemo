@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const LoginContainer = styled.div`
   display: flex;
@@ -70,12 +71,13 @@ function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const { login } = useAuth();
   const navigate = useNavigate();
+  console.log('API URL :', API_URL);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const endpoint = isLogin ? '/token' : '/register';
-      const response = await axios.post(`http://localhost:8000${endpoint}`, {
+      const response = await axios.post(`${API_URL}${endpoint}`, {
         email,
         password,
       });
